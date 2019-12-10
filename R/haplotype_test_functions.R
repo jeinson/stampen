@@ -13,7 +13,7 @@ characterize_haplotypes <- function(dataset, beta_config){
   x <- x[x$num != 0,]
   x <- as.data.frame(lapply(x, rep, x$num))
   x <- x[,-4]
-  x$beta <- beta_config[x$hap_config]
+  x$beta <- beta_config[as.character(x$hap_config)] # Fuck you R
   x$hom <- grepl("A.A.", x$hap_config) | grepl("a.a.", x$hap_config)
 
   x$exp_beta <- (x$sqtl_af)^2 / (x$sqtl_af^2 + (1-x$sqtl_af)^2)

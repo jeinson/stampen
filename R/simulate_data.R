@@ -39,7 +39,7 @@ simulate_haplotype_counts <- function(
     ssnp_haps <-
       t(
         sapply(1:n_indvs, function(x){
-          sample(c(0,1), 2, replace = T, prob = c(1-qtl_af[i], qtl_af[i]))
+          sample(c(0,1), 2, replace = T, prob = c(qtl_af[i], 1-qtl_af[i]))
         })
       )
 
@@ -57,7 +57,7 @@ simulate_haplotype_counts <- function(
     aBab = 0
 
     AbaB = 0
-    abAb = 0
+    aBAb = 0
     AbAB = 0
     ABAb = 0
 
@@ -70,18 +70,47 @@ simulate_haplotype_counts <- function(
       if(identical(x, c(0, 0, 0, 1))) abaB <- abaB + 1
       if(identical(x, c(0, 0, 1, 0))) aBab <- aBab + 1
       if(identical(x, c(1, 0, 0, 1))) AbaB <- AbaB + 1
-      if(identical(x, c(0, 1, 1, 0))) abAb <- abAb + 1
+      if(identical(x, c(0, 1, 1, 0))) aBAb <- aBAb + 1
       if(identical(x, c(1, 1, 0, 1))) AbAB <- AbAB + 1
       if(identical(x, c(1, 1, 1, 0))) ABAb <- ABAb + 1
     }
 
-    out <- data.frame(gene = sprintf("gene%i", i), sqtl_af = qtl_af[i], AbaB, abAb, AbAB, ABAb, abAB, ABab, abaB, aBab)
+    out <- data.frame(gene = sprintf("gene%i", i), sqtl_af = qtl_af[i], AbaB, aBAb, AbAB, ABAb, abAB, ABab, abaB, aBab)
     haplotype_configs <- rbind(haplotype_configs, out)
 
   }
   return(haplotype_configs)
 }
 
+# Simulate the data that's included in this package
+# set.seed(128)
+# test_data <- simulate_haplotype_counts(500, 1000)
+# save(test_data, file = "data/test_data.rda")
+#
+# Save the haplotype configurations to the data directory
+# beta_config_sqtl <-
+#   c(abAB = 0,
+#     ABab = 0,
+#     abaB = 0,
+#     aBab = 0,
+#     AbaB = 1,
+#     aBAb = 1,
+#     AbAB = 1,
+#     ABAb = 1
+#   )
+# save(beta_config_sqtl, file = "data/beta_config_sqtl.rda")
+#
+# beta_config_eqtl <-
+#   c(abAB = 0,
+#     ABab = 0,
+#     abaB = 1,
+#     aBab = 1,
+#     AbaB = 1,
+#     aBAb = 1,
+#     AbAB = 0,
+#     ABAb = 0
+#   )
+# save(beta_config_eqtl, file = "data/beta_config_eqtl.rda")
 
 beta_plotter <- function(a,b, ...){
   x <- seq(0, 1, by = .0005)
