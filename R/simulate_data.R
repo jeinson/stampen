@@ -89,14 +89,14 @@ simulate_haplotype_counts <- function(
 #
 # Save the haplotype configurations to the data directory
 # beta_config_sqtl <-
-#   c(abAB = 0,
-#     ABab = 0,
-#     abaB = 0,
-#     aBab = 0,
-#     AbaB = 1,
-#     aBAb = 1,
-#     AbAB = 1,
-#     ABAb = 1
+#   c(abAB = 1,
+#     ABab = 1,
+#     abaB = 1,
+#     aBab = 1,
+#     AbaB = 0,
+#     aBAb = 0,
+#     AbAB = 0,
+#     ABAb = 0
 #   )
 # save(beta_config_sqtl, file = "data/beta_config_sqtl.rda")
 #

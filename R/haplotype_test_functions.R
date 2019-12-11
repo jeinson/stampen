@@ -55,7 +55,7 @@ calculate_epsilon_alt <- function(dataset, beta_config){
   x <- characterize_haplotypes(dataset, beta_config)
 
   # Do the math
-  mean( (x$beta - 0.5) / x$exp_beta)
+  mean( (x$beta - 0.5) / abs(x$beta - x$exp_beta) )
 }
 
 
@@ -112,7 +112,7 @@ bootstrap_test_alt <- function(dataset, beta_config, B = 1000){
     x_b <- x[ix,]
 
     # Do the math
-    p_b[b] <- mean((as.numeric(x_b$beta) - .5) / x_b$exp_beta)
+    p_b[b] <- mean( (x_b$beta - 0.5) / abs(x_b$beta - x_b$exp_beta) )
   }
 
   p_b <- sort(p_b)
