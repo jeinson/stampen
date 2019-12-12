@@ -12,3 +12,19 @@
 #'     ...
 #'}
 "test_data"
+
+#' beta_config_eqtl
+#'
+#' ...
+#'
+#' @format ...
+#'
+"beta_config_eqtl"
+
+#' beta_config_sqtl
+#'
+#' ...
+#'
+#' @format ...
+#'
+"beta_config_sqtl"

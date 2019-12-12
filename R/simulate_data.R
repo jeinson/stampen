@@ -12,6 +12,8 @@
 #' @param qtl_alpha shape parameter alpha for the qtl allele frequency. Default = 1
 #' @param qtl_beta shape paramteter beta for the qtl allele frequency. Default = 1
 #'
+#' @export
+#'
 #' @examples
 #' simulate_haplotype_counts(n_indvs = 100, n_genes = 5)
 
@@ -83,8 +85,8 @@ simulate_haplotype_counts <- function(
 }
 
 # Simulate the data that's included in this package
-# set.seed(128)
-# test_data <- simulate_haplotype_counts(500, 1000)
+# set.seed(1234321)
+# test_data <- simulate_haplotype_counts(1000, 5000)
 # save(test_data, file = "data/test_data.rda")
 #
 # Save the haplotype configurations to the data directory
