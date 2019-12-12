@@ -7,7 +7,7 @@
 calculate_epsilon(dataset, beta_config)
 }
 \arguments{
-\item{dataset}{}
+\item{dataset}{...}
 }
 \description{
 This function calculates the value of epsilon, dependent on the value of
