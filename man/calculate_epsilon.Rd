@@ -6,6 +6,9 @@
 \usage{
 calculate_epsilon(dataset, beta_config)
 }
+\arguments{
+\item{dataset}{}
+}
 \description{
 This function calculates the value of epsilon, dependent on the value of
 beta and expected value of beta given each haplotype combination observed in

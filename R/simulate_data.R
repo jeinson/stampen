@@ -14,7 +14,8 @@
 #'
 #' @examples
 #' simulate_haplotype_counts(n_indvs = 100, n_genes = 5)
-
+#'
+#' @export
 simulate_haplotype_counts <- function(
   n_indvs,
   n_genes,
@@ -83,8 +84,8 @@ simulate_haplotype_counts <- function(
 }
 
 # Simulate the data that's included in this package
-# set.seed(128)
-# test_data <- simulate_haplotype_counts(500, 1000)
+# set.seed(1234321)
+# test_data <- simulate_haplotype_counts(1000, 5000)
 # save(test_data, file = "data/test_data.rda")
 #
 # Save the haplotype configurations to the data directory

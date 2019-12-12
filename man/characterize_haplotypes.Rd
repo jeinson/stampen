@@ -4,15 +4,20 @@
 \alias{characterize_haplotypes}
 \title{Reshape data and classify the haplotypes according to the model}
 \usage{
-characterize_haplotypes(dataset, beta_config)
+characterize_haplotypes(dataset, beta_config,
+  qtl_allele_frequency_column = "sqtl_af", gene_name_column = "gene")
 }
 \arguments{
-\item{dataset}{The input dataset. See sample data for format}
+\item{dataset}{A data.frame or tibble. The input dataset. See sample data for format}
 
-\item{beta_config}{The values assigned to beta for each haplotype possibility. This can be changed to tweak
-the modified penetrance hypothesis. d
+\item{beta_config}{Vector. The values assigned to beta for each haplotype possibility. This can be changed to tweak the hypothesis.
+Values are provided in the package as `beta_config_eqtl` and `beta_config_sqtl`, depending on the hypothesis
+you are testing.}
 
-Internal function, not exported}
+\item{qtl_allele_frequency_column}{String. The name of the column in the input data with QTL allele frequencies. Default: `sqtl_af`
+the modified penetrance hypothesis.}
+
+\item{gene_name_column}{String. The name of the column in the input data with the gene name. Default: `gene`}
 }
 \description{
 This function takes the haplotype configurations in the standard input format
