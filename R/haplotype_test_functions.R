@@ -52,9 +52,10 @@ characterize_haplotypes <- function(dataset, beta_config,
 #' beta and expected value of beta given each haplotype combination observed in
 #' a set of haplotypes based on phased genetic data.
 #'
-#' @param dataset
+#' @param dataset ...
 #'
 #' @export
+#'
 calculate_epsilon <- function(dataset, beta_config){
   x <- characterize_haplotypes(dataset, beta_config)
 
@@ -74,6 +75,7 @@ calculate_epsilon <- function(dataset, beta_config){
 #' @param B The number of bootstraps to perform. Default: 1000
 #'
 #' @export
+#'
 bootstrap_test <- function(dataset, beta_config, B = 1000){
   x <- characterize_haplotypes(dataset, beta_config)
 

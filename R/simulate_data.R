@@ -12,6 +12,8 @@
 #' @param qtl_alpha shape parameter alpha for the qtl allele frequency. Default = 1
 #' @param qtl_beta shape paramteter beta for the qtl allele frequency. Default = 1
 #'
+#' @export
+#'
 #' @examples
 #' simulate_haplotype_counts(n_indvs = 100, n_genes = 5)
 #'
