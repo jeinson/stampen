@@ -1,0 +1,52 @@
+---
+title: "Simulated Data Vignette"
+author: "Jonah Einson"
+date: "12/10/19"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Simulated Data Vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+In this vignette, I demonstrate how to simulate some haplotype data with the-
+`tompen` package, then test to see if is enriched for haplotypes that reduce
+variant penetrance.-
+
+```{r}
+library(tompen)
+```
+
+```{r}
+set.seed(128)
+test_data <- simulate_haplotype_counts(n_indvs = 500, n_genes = 500) # leave the default hyperparameters
+```
+
+```{r}
+data('test_data')
+test_data
+```
+
+Let's take a look at the built in haplotype configurations, which we consider
+"good" or "bad." these can be adjusted to- 
+```{r}
+data('beta_config_sqtl')
+beta_config_sqtl
+```
+
+```{r}
+data('beta_config_eqtl')
+beta_config_eqtl
+```
+
+```{r}
+calculate_epsilon(test_data, beta_config = beta_config_sqtl)
+```
+
