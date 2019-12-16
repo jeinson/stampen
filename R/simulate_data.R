@@ -120,3 +120,12 @@ beta_plotter <- function(a,b, ...){
   y <- dbeta(x, a, b)
   plot(x,y, type = "l", ...)
 }
+
+beta_mom_estimator <- function(x){
+  xbar <- mean(x)
+  vbar <- var(x)
+
+  ahat <- xbar*((xbar*(1-xbar))/vbar - 1)
+  bhat <- (1-xbar)*(xbar*(1-xbar)/vbar - 1)
+  return(c(ahat, bhat))
+}
