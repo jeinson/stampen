@@ -18,15 +18,15 @@ characterize_haplotypes <- function(dataset, beta_config,
   x <- dataset
 
   # Make sure to use the correct beta configurations
-  beta_config <- beta_config[names(beta_config) %in% names(dataset)]
+  beta_config <- beta_config[names(beta_config) %in% names(x)]
 
   # Rename the input data
   x <- dplyr::rename(x, "sqtl_af" = qtl_allele_frequency_column)
   x <- dplyr::rename(x, "gene" = gene_name_column)
-  x <- dplyr::select(x, sqtl_af, gene, names(beta_config))
+  x <- dplyr::select(x, "sqtl_af", "gene", names(beta_config))
 
   # Reshape and spread haplotypes out to one per line
-  x <- tidyr::gather(dataset, hap_config, num, -gene, -sqtl_af, convert = F, factor_key = F)
+  x <- tidyr::gather(x, hap_config, num, -"gene", -"sqtl_af", convert = F, factor_key = F)
   x <- x[x$num != 0,]
   x <- as.data.frame(lapply(x, rep, x$num))
   x <- x[,-4]
@@ -56,8 +56,8 @@ characterize_haplotypes <- function(dataset, beta_config,
 #'
 #' @export
 #'
-calculate_epsilon <- function(dataset, beta_config){
-  x <- characterize_haplotypes(dataset, beta_config)
+calculate_epsilon <- function(dataset, beta_config, ...){
+  x <- characterize_haplotypes(dataset, beta_config, ...)
 
   # Do the math
   mean( (x$beta - x$exp_beta) / x$exp_beta)
@@ -76,8 +76,9 @@ calculate_epsilon <- function(dataset, beta_config){
 #'
 #' @export
 #'
-bootstrap_test <- function(dataset, beta_config, B = 1000){
-  x <- characterize_haplotypes(dataset, beta_config)
+bootstrap_test <- function(dataset, beta_config, B = 1000, ...){
+  x <- characterize_haplotypes(dataset, beta_config, ...)
+  epsilon <- mean((as.numeric(x$beta) - x$exp_beta) / x$exp_beta)
 
   p_b = rep(0, B)
   for(b in 1:B){
@@ -93,6 +94,12 @@ bootstrap_test <- function(dataset, beta_config, B = 1000){
   lower <- p_b[ceiling(B * .05)]
   upper <- p_b[ceiling(B * .95)]
 
-  return(c(bootstrap_p = p_Ho, lower = lower, upper = upper))
+  n_haplotypes <- nrow(dataset)
+
+  return(c(bootstrap_p = p_Ho,
+           epsilon = epsilon,
+           lower = lower,
+           upper = upper,
+           n_haplotypes = n_haplotypes))
 
 }
