@@ -4,7 +4,7 @@
 \alias{calculate_epsilon}
 \title{Calculate epsilon}
 \usage{
-calculate_epsilon(dataset, beta_config)
+calculate_epsilon(dataset, beta_config, ...)
 }
 \arguments{
 \item{dataset}{...}

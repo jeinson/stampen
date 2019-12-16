@@ -4,7 +4,7 @@
 \alias{bootstrap_test}
 \title{Calculate a bootstrapped p-value}
 \usage{
-bootstrap_test(dataset, beta_config, B = 1000)
+bootstrap_test(dataset, beta_config, B = 1000, ...)
 }
 \arguments{
 \item{dataset}{The input dataset. See sample data for format}
