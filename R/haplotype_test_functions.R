@@ -67,8 +67,10 @@ calculate_epsilon <- function(dataset, beta_config, ...){
 #' Calculate a bootstrapped p-value
 #'
 #' This function takes the input data and returns a p-value for the null
-#' hypothesis that haplotype configuations which influence coding variant
-#' penetrance are not significantly enriched in the population.
+#' hypothesis that haplotype configurations which influence coding variant
+#' penetrance are not significantly enriched in the population. The p-value is
+#' estimated through a bootstrapping procedure, and a confidence interval
+#' is returned.
 #'
 #' @param dataset The input dataset. See sample data for format
 #' @param beta_config The values assigned to beta for each haplotype possibility. This can be changed to tweak
@@ -82,7 +84,7 @@ bootstrap_test <- function(dataset, beta_config, B = 1000, ...){
 
   p_b = rep(0, B)
   for(b in 1:B){
-    ix <- sample(1:nrow(x), nrow(x), replace = T)
+    ix <- sample(1:nrow(x), nrow(x)/2, replace = T)
     x_b <- x[ix,]
 
     # Do the math
@@ -94,7 +96,7 @@ bootstrap_test <- function(dataset, beta_config, B = 1000, ...){
   lower <- p_b[ceiling(B * .05)]
   upper <- p_b[ceiling(B * .95)]
 
-  n_haplotypes <- nrow(dataset)
+  n_haplotypes <- nrow(x)
 
   return(c(bootstrap_p = p_Ho,
            epsilon = epsilon,
@@ -102,4 +104,31 @@ bootstrap_test <- function(dataset, beta_config, B = 1000, ...){
            upper = upper,
            n_haplotypes = n_haplotypes))
 
+}
+
+#' Calculate a poisson-binomial p-value
+#'
+#' This function takes the input data and returns a p-value for the null
+#' hypothesis that haplotype configurations which influence coding variant
+#' penetrance are not significangtly enriched in the population. The p-value
+#' is calculated analytically using the poisson-binomial distribuion, which
+#' is the distribution over the sum of n independent and NOT identically
+#' distributed bernoulli random variables.
+#'
+#' @param dataset
+#' @param beta_config
+#'
+#' @export
+#'
+poison_binomial_test <- function(dataset, beta_config, ...){
+  x <- characterize_haplotypes(dataset, beta_config, ...)
+  epsilon <- mean((as.numeric(x$beta) - x$exp_beta) / x$exp_beta)
+
+  p <- poisbinom::ppoisbinom(sum(x$beta), x$exp_beta)
+
+  return(c(poison_binomial_p = p,
+           epsilon = epsilon,
+           n_haplotypes = nrow(x)
+  )
+  )
 }

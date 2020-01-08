@@ -15,6 +15,8 @@ bootstrap_test(dataset, beta_config, B = 1000, ...)
 }
 \description{
 This function takes the input data and returns a p-value for the null
-hypothesis that haplotype configuations which influence coding variant
-penetrance are not significantly enriched in the population.
+hypothesis that haplotype configurations which influence coding variant
+penetrance are not significantly enriched in the population. The p-value is
+estimated through a bootstrapping procedure, and a confidence interval
+is returned.
 }
