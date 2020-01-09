@@ -46,6 +46,9 @@ simulate_haplotype_counts <- function(
         })
       )
 
+    # Recompute the QTL allele freqency based on what we got
+    qtl_af[i] <- sum(ssnp_haps)/(2*n_genes)
+
     # Randomly draw which haplotype the coding SNP is on.
     csnp_haps <- t(sapply(1:n_indvs, function(x){
       sample(c(0,1), 2, replace = T, prob = c(1-csnp_af[i], csnp_af[i]))
