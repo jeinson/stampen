@@ -84,7 +84,7 @@ bootstrap_test <- function(dataset, beta_config, B = 1000, ...){
 
   p_b = rep(0, B)
   for(b in 1:B){
-    ix <- sample(1:nrow(x), nrow(x)/2, replace = T)
+    ix <- sample(1:nrow(x), nrow(x), replace = T)
     x_b <- x[ix,]
 
     # Do the math
@@ -124,7 +124,9 @@ poison_binomial_test <- function(dataset, beta_config, ...){
   x <- characterize_haplotypes(dataset, beta_config, ...)
   epsilon <- mean((as.numeric(x$beta) - x$exp_beta) / x$exp_beta)
 
-  p <- poisbinom::ppoisbinom(sum(x$beta), x$exp_beta)
+  p1 <- poisbinom::ppoisbinom(sum(x$beta), x$exp_beta, lower_tail = T)
+  p2 <- poisbinom::ppoisbinom(sum(x$beta), x$exp_beta, lower_tail = F)
+  p <- 2 * min(p1, p2)
 
   return(c(poison_binomial_p = p,
            epsilon = epsilon,
