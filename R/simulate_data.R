@@ -11,6 +11,7 @@
 #' @param c_beta shape parameter beta for the csnp allele frequency. Default = 3000
 #' @param qtl_alpha shape parameter alpha for the qtl allele frequency. Default = 1
 #' @param qtl_beta shape paramteter beta for the qtl allele frequency. Default = 1
+#' @param maf_cutoff cutoff for the minimum qtl allele frequency when simulating data. This will force the beta distribution for the qtl allele frequency to these limits.
 #'
 #' @export
 #'
@@ -24,12 +25,13 @@ simulate_haplotype_counts <- function(
   c_alpha = 0.656,
   c_beta = 437.47,
   qtl_alpha = 1,
-  qtl_beta = 1)
+  qtl_beta = 1,
+  maf_cutoff = .05)
 {
 
   # Randomly draw the QTL allele frequencies for all genes simulated
   qtl_af <- rbeta(n_genes, qtl_alpha, qtl_beta)
-  qtl_af <- .9 * qtl_af + .05 # Use a little y = mx+b to get the haplotypes to the right place
+  qtl_af <- (1-2*maf_cutoff) * qtl_af + maf_cutoff # Use a little y = mx+b to get the haplotypes to the right place
 
   # Simulate the allele frequency of coding variants corresponding to each gene
   csnp_af <- rbeta(n_genes, c_alpha, c_beta)
@@ -47,7 +49,6 @@ simulate_haplotype_counts <- function(
       )
 
     # Recompute the QTL allele freqency based on what we got
-    qtl_af[i] <- sum(ssnp_haps)/(2*n_genes)
     qtl_af[i] <- 1-sum(ssnp_haps)/(n_indvs*2)
 
     # Randomly draw which haplotype the coding SNP is on.
