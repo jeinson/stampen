@@ -5,7 +5,7 @@
 \title{A function for generating fake data}
 \usage{
 simulate_haplotype_counts(n_indvs, n_genes, c_alpha = 0.656,
-  c_beta = 437.47, qtl_alpha = 1, qtl_beta = 1)
+  c_beta = 437.47, qtl_alpha = 1, qtl_beta = 1, maf_cutoff = 0.05)
 }
 \arguments{
 \item{n_indvs}{The number of individuals to simulate}
@@ -19,6 +19,8 @@ simulate_haplotype_counts(n_indvs, n_genes, c_alpha = 0.656,
 \item{qtl_alpha}{shape parameter alpha for the qtl allele frequency. Default = 1}
 
 \item{qtl_beta}{shape paramteter beta for the qtl allele frequency. Default = 1}
+
+\item{maf_cutoff}{cutoff for the minimum qtl allele frequency when simulating data. This will force the beta distribution for the qtl allele frequency to these limits.}
 }
 \description{
 This function can simulate some haplotype combinations based on allele

@@ -72,15 +72,15 @@ calculate_epsilon <- function(dataset, beta_config, ...){
 #' estimated through a bootstrapping procedure, and a confidence interval
 #' is returned.
 #'
-#' @param dataset The input dataset. See sample data for format
+#' @param haps The output of `characterize_haplotypes`, or another haplotype calling tool. There is one line per individual
 #' @param beta_config The values assigned to beta for each haplotype possibility. This can be changed to tweak
 #' @param B The number of bootstraps to perform. Default: 1000
 #'
 #' @export
 #'
-bootstrap_test <- function(dataset, beta_config, B = 1000, ...){
-  x <- characterize_haplotypes(dataset, beta_config, ...)
-  epsilon <- mean((as.numeric(x$beta) - x$exp_beta) / x$exp_beta)
+bootstrap_test <- function(haps, exp_beta = "exp_beta", B = 1000, ...){
+  x <- haps
+  epsilon <- mean((as.numeric(x$beta) - x[[exp_beta]]) / x[[exp_beta]])
 
   p_b = rep(0, B)
   for(b in 1:B){
@@ -88,7 +88,7 @@ bootstrap_test <- function(dataset, beta_config, B = 1000, ...){
     x_b <- x[ix,]
 
     # Do the math
-    p_b[b] <- mean((as.numeric(x_b$beta) - x_b$exp_beta) / x_b$exp_beta)
+    p_b[b] <- mean((as.numeric(x_b$beta) - x_b[[exp_beta]]) / x_b[[exp_beta]])
   }
 
   p_b <- sort(p_b)
