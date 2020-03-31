@@ -12,6 +12,7 @@
 #' @param gene_name_column String. The name of the column in the input data with the gene name. Default: `gene`
 #'
 #' @export
+#'
 characterize_haplotypes <- function(dataset, beta_config,
                                     qtl_allele_frequency_column = "sqtl_af",
                                     gene_name_column = "gene"){
@@ -53,14 +54,18 @@ characterize_haplotypes <- function(dataset, beta_config,
 #' a set of haplotypes based on phased genetic data.
 #'
 #' @param dataset ...
+#' @param af_weighted logical. If TRUE, weight the epsilon calculation by the sQTL minor allele frequency
 #'
 #' @export
 #'
-calculate_epsilon <- function(dataset, beta_config, ...){
+calculate_epsilon <- function(dataset, beta_config, af_weighted = FALSE, ...){
   x <- characterize_haplotypes(dataset, beta_config, ...)
 
   # Do the math
-  mean( (x$beta - x$exp_beta) / x$exp_beta)
+  ifelse(af_weighted,
+         mean( (x$beta - x$exp_beta) / x$exp_beta) * x$sqtl_af^2,
+         mean( (x$beta - x$exp_beta) / x$exp_beta)
+  )
 }
 
 
@@ -74,13 +79,19 @@ calculate_epsilon <- function(dataset, beta_config, ...){
 #'
 #' @param haps The output of `characterize_haplotypes`, or another haplotype calling tool. There is one line per individual
 #' @param beta_config The values assigned to beta for each haplotype possibility. This can be changed to tweak
+#' @param af_weighted logical. If TRUE, weight the epsilon calculation by the sQTL minor allele frequency
 #' @param B The number of bootstraps to perform. Default: 1000
 #'
 #' @export
 #'
-bootstrap_test <- function(haps, exp_beta = "exp_beta", B = 1000, ...){
+bootstrap_test <- function(haps, exp_beta = "exp_beta", af_weighted = FALSE,
+                           B = 1000, ...){
   x <- haps
-  epsilon <- mean((as.numeric(x$beta) - x[[exp_beta]]) / x[[exp_beta]])
+  epsilon <-
+    ifelse(af_weighted,
+           mean((as.numeric(x$beta) - x[[exp_beta]]) / x[[exp_beta]]) * x$sqtl_af^2,
+           mean((as.numeric(x$beta) - x[[exp_beta]]) / x[[exp_beta]])
+    )
 
   p_b = rep(0, B)
   for(b in 1:B){
@@ -88,7 +99,11 @@ bootstrap_test <- function(haps, exp_beta = "exp_beta", B = 1000, ...){
     x_b <- x[ix,]
 
     # Do the math
-    p_b[b] <- mean((as.numeric(x_b$beta) - x_b[[exp_beta]]) / x_b[[exp_beta]])
+    p_b[b] <-
+      ifelse(af_weighted,
+             mean((as.numeric(x_b$beta) - x_b[[exp_beta]]) / x_b[[exp_beta]]) * x_b$sqtl_af^2,
+             mean((as.numeric(x_b$beta) - x_b[[exp_beta]]) / x_b[[exp_beta]])
+      )
   }
 
   p_b <- sort(p_b)
