@@ -4,8 +4,12 @@
 \alias{characterize_haplotypes}
 \title{Reshape data and classify the haplotypes according to the model}
 \usage{
-characterize_haplotypes(dataset, beta_config,
-  qtl_allele_frequency_column = "sqtl_af", gene_name_column = "gene")
+characterize_haplotypes(
+  dataset,
+  beta_config,
+  qtl_allele_frequency_column = "sqtl_af",
+  gene_name_column = "gene"
+)
 }
 \arguments{
 \item{dataset}{A data.frame or tibble. The input dataset. See sample data for format}

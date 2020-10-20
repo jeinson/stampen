@@ -4,7 +4,9 @@
 \name{beta_config_sqtl}
 \alias{beta_config_sqtl}
 \title{beta_config_sqtl}
-\format{...}
+\format{
+...
+}
 \usage{
 beta_config_sqtl
 }

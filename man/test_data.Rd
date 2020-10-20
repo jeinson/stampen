@@ -4,13 +4,15 @@
 \name{test_data}
 \alias{test_data}
 \title{Some simulated haplotype count data from 1000 individuals and 500 genes}
-\format{A data frame with 500 rows and 10 columns
+\format{
+A data frame with 500 rows and 10 columns
 \describe{
     \item{gene}{simulated gene name}
     \item{sqtl_af}{The frequency of the higher included sQTL haplotype}
     \item{[Aa][Bb][Aa][Bb]}{The counts of each haplotype configuration across the 1000 individuals}
     ...
-}}
+}
+}
 \usage{
 test_data
 }

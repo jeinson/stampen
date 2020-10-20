@@ -4,16 +4,16 @@
 \alias{poison_binomial_test}
 \title{Calculate a poisson-binomial p-value}
 \usage{
-poison_binomial_test(dataset, beta_config, ...)
+poison_binomial_test(haps, ...)
 }
 \arguments{
-\item{beta_config}{}
+\item{haps}{The output of `characterize_haplotypes`, or another haplotype calling tool. There is one line per individual}
 }
 \description{
 This function takes the input data and returns a p-value for the null
 hypothesis that haplotype configurations which influence coding variant
 penetrance are not significangtly enriched in the population. The p-value
 is calculated analytically using the poisson-binomial distribuion, which
-is the distribution over the sum of n independent and NOT identically
+is the distribution over the sum of n independent but NOT identically
 distributed bernoulli random variables.
 }

@@ -54,18 +54,14 @@ characterize_haplotypes <- function(dataset, beta_config,
 #' a set of haplotypes based on phased genetic data.
 #'
 #' @param dataset ...
-#' @param af_weighted logical. If TRUE, weight the epsilon calculation by the sQTL minor allele frequency
 #'
 #' @export
 #'
-calculate_epsilon <- function(dataset, beta_config, af_weighted = FALSE, ...){
+calculate_epsilon <- function(dataset, beta_config, ...){
   x <- characterize_haplotypes(dataset, beta_config, ...)
 
   # Do the math
-  ifelse(af_weighted,
-         mean( (x$beta - x$exp_beta) / x$exp_beta) * x$sqtl_af^2,
-         mean( (x$beta - x$exp_beta) / x$exp_beta)
-  )
+  mean(x$beta - x$exp_beta)
 }
 
 
@@ -79,7 +75,6 @@ calculate_epsilon <- function(dataset, beta_config, af_weighted = FALSE, ...){
 #'
 #' @param haps The output of `characterize_haplotypes`, or another haplotype calling tool. There is one line per individual
 #' @param beta_config The values assigned to beta for each haplotype possibility. This can be changed to tweak
-#' @param af_weighted logical. If TRUE, weight the epsilon calculation by the sQTL minor allele frequency
 #' @param B The number of bootstraps to perform. Default: 1000
 #'
 #' @export
@@ -88,10 +83,7 @@ bootstrap_test <- function(haps, exp_beta = "exp_beta", af_weighted = FALSE,
                            B = 1000, ...){
   x <- haps
   epsilon <-
-    ifelse(af_weighted,
-           mean((as.numeric(x$beta) - x[[exp_beta]]) / x[[exp_beta]]) * x$sqtl_af^2,
-           mean((as.numeric(x$beta) - x[[exp_beta]]) / x[[exp_beta]])
-    )
+    mean((as.numeric(x$beta) - x[[exp_beta]]))
 
   p_b = rep(0, B)
   for(b in 1:B){
@@ -100,10 +92,7 @@ bootstrap_test <- function(haps, exp_beta = "exp_beta", af_weighted = FALSE,
 
     # Do the math
     p_b[b] <-
-      ifelse(af_weighted,
-             mean((as.numeric(x_b$beta) - x_b[[exp_beta]]) / x_b[[exp_beta]]) * x_b$sqtl_af^2,
-             mean((as.numeric(x_b$beta) - x_b[[exp_beta]]) / x_b[[exp_beta]])
-      )
+      mean((as.numeric(x_b$beta) - x_b[[exp_beta]]))
   }
 
   p_b <- sort(p_b)
@@ -127,16 +116,16 @@ bootstrap_test <- function(haps, exp_beta = "exp_beta", af_weighted = FALSE,
 #' hypothesis that haplotype configurations which influence coding variant
 #' penetrance are not significangtly enriched in the population. The p-value
 #' is calculated analytically using the poisson-binomial distribuion, which
-#' is the distribution over the sum of n independent and NOT identically
+#' is the distribution over the sum of n independent but NOT identically
 #' distributed bernoulli random variables.
 #'
-#' @param dataset
-#' @param beta_config
+#' @param haps The output of `characterize_haplotypes`, or another haplotype calling tool. There is one line per individual
 #'
 #' @export
 #'
-poison_binomial_test <- function(dataset, beta_config, ...){
-  x <- characterize_haplotypes(dataset, beta_config, ...)
+poison_binomial_test <- function(haps, ...){
+
+  x <- haps
   epsilon <- mean((as.numeric(x$beta) - x$exp_beta) / x$exp_beta)
 
   p1 <- poisbinom::ppoisbinom(sum(x$beta), x$exp_beta, lower_tail = T)

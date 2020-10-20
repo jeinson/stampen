@@ -4,13 +4,10 @@
 \alias{bootstrap_test}
 \title{Calculate a bootstrapped p-value}
 \usage{
-bootstrap_test(haps, exp_beta = "exp_beta", af_weighted = FALSE,
-  B = 1000, ...)
+bootstrap_test(haps, exp_beta = "exp_beta", af_weighted = FALSE, B = 1000, ...)
 }
 \arguments{
 \item{haps}{The output of `characterize_haplotypes`, or another haplotype calling tool. There is one line per individual}
-
-\item{af_weighted}{logical. If TRUE, weight the epsilon calculation by the sQTL minor allele frequency}
 
 \item{B}{The number of bootstraps to perform. Default: 1000}
 

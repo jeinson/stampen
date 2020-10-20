@@ -4,7 +4,9 @@
 \name{beta_config_eqtl}
 \alias{beta_config_eqtl}
 \title{beta_config_eqtl}
-\format{...}
+\format{
+...
+}
 \usage{
 beta_config_eqtl
 }

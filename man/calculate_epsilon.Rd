@@ -4,12 +4,10 @@
 \alias{calculate_epsilon}
 \title{Calculate epsilon}
 \usage{
-calculate_epsilon(dataset, beta_config, af_weighted = FALSE, ...)
+calculate_epsilon(dataset, beta_config, ...)
 }
 \arguments{
 \item{dataset}{...}
-
-\item{af_weighted}{logical. If TRUE, weight the epsilon calculation by the sQTL minor allele frequency}
 }
 \description{
 This function calculates the value of epsilon, dependent on the value of

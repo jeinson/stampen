@@ -4,8 +4,15 @@
 \alias{simulate_haplotype_counts}
 \title{A function for generating fake data}
 \usage{
-simulate_haplotype_counts(n_indvs, n_genes, c_alpha = 0.656,
-  c_beta = 437.47, qtl_alpha = 1, qtl_beta = 1, maf_cutoff = 0.05)
+simulate_haplotype_counts(
+  n_indvs,
+  n_genes,
+  c_alpha = 0.656,
+  c_beta = 437.47,
+  qtl_alpha = 1,
+  qtl_beta = 1,
+  maf_cutoff = 0.05
+)
 }
 \arguments{
 \item{n_indvs}{The number of individuals to simulate}
