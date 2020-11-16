@@ -129,7 +129,7 @@ poison_binomial_test <- function(haps, ...){
   epsilon <- mean((as.numeric(x$beta) - x$exp_beta))
 
   p1 <- poisbinom::ppoisbinom(sum(x$beta), x$exp_beta, lower_tail = T)
-  p2 <- poisbinom::ppoisbinom(sum(x$beta), x$exp_beta, lower_tail = F)
+  p2 <- 1 - p1
   p <- 2 * min(p1, p2)
 
   return(c(poison_binomial_p = p,
