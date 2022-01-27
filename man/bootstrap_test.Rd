@@ -4,14 +4,14 @@
 \alias{bootstrap_test}
 \title{Calculate a bootstrapped p-value}
 \usage{
-bootstrap_test(haps, exp_beta = "exp_beta", af_weighted = FALSE, B = 1000, ...)
+bootstrap_test(haps, exp_beta = "exp_beta", B = 1000)
 }
 \arguments{
-\item{haps}{The output of `characterize_haplotypes`, or another haplotype calling tool. There is one line per individual}
+\item{haps}{The output of `characterize_haplotypes`, or another haplotype calling tool. There is one line per haplotype. Must contain the column "beta" and "exp_beta"}
+
+\item{exp_beta}{The nuame of the column in "haps" that contains the expectation of beta. Defaults to "exp_beta"}
 
 \item{B}{The number of bootstraps to perform. Default: 1000}
-
-\item{beta_config}{The values assigned to beta for each haplotype possibility. This can be changed to tweak}
 }
 \description{
 This function takes the input data and returns a p-value for the null

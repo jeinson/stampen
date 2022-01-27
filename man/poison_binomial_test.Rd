@@ -4,10 +4,10 @@
 \alias{poison_binomial_test}
 \title{Calculate a poisson-binomial p-value}
 \usage{
-poison_binomial_test(haps, ...)
+poison_binomial_test(haps)
 }
 \arguments{
-\item{haps}{The output of `characterize_haplotypes`, or another haplotype calling tool. There is one line per individual}
+\item{haps}{The output of `characterize_haplotypes`, or another haplotype calling tool. There is one line per haplotype}
 }
 \description{
 This function takes the input data and returns a p-value for the null

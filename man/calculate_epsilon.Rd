@@ -7,7 +7,11 @@
 calculate_epsilon(dataset, beta_config, ...)
 }
 \arguments{
-\item{dataset}{...}
+\item{dataset}{A set of haplotype counts}
+
+\item{beta_config}{A beta configuration (use either beta_config_eqtl or beta_config_sqtl, which are included in this package)}
+
+\item{...}{Additional arguments passed to `characterize_haplotypes`}
 }
 \description{
 This function calculates the value of epsilon, dependent on the value of

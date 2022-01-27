@@ -30,7 +30,7 @@ simulate_haplotype_counts <- function(
 {
 
   # Randomly draw the QTL allele frequencies for all genes simulated
-  qtl_af <- rbeta(n_genes, qtl_alpha, qtl_beta)
+  qtl_af <- stats::rbeta(n_genes, qtl_alpha, qtl_beta)
   qtl_af <- (1-2*maf_cutoff) * qtl_af + maf_cutoff # Use a little y = mx+b to get the haplotypes to the right place
 
   # Simulate the allele frequency of coding variants corresponding to each gene
@@ -93,9 +93,9 @@ simulate_haplotype_counts <- function(
 # Simulate the data that's included in this package
 # set.seed(1234321)
 # test_data <- simulate_haplotype_counts(1000, 5000)
-# save(test_data, file = "data/test_data.rda")
-#
-# Save the haplotype configurations to the data directory
+# save(test_data, file = "data/test_data.rda", compress = "xz")
+
+#Save the haplotype configurations to the data directory
 # beta_config_sqtl <-
 #   c(abAB = 1,
 #     ABab = 1,
@@ -120,15 +120,34 @@ simulate_haplotype_counts <- function(
 #   )
 # save(beta_config_eqtl, file = "data/beta_config_eqtl.rda")
 
+#' Beta plotting function
+#'
+#' This function is simply used to plot a beta distribution, to give the user a
+#' sense for what the simulated allele frequency distribution looks like.
+#'
+#' @param a The alpha parameter of a beta distribution
+#' @param b The beta parameter of a beta distribution
+#' @param ... Additional arguments to the plot function
+#'
+#' @export
 beta_plotter <- function(a,b, ...){
   x <- seq(0, 1, by = .0005)
-  y <- dbeta(x, a, b)
+  y <- stats::dbeta(x, a, b)
   plot(x,y, type = "l", ...)
 }
 
+
+#' Beta Method-of-Moments Estimator
+#'
+#' A useful function for estimating the parameters for a beta distribution that
+#' generated some given data. Returns estimated alpha and beta values
+#'
+#' @param x A vector of beta-distributed values (between 0 and 1)
+#'
+#' @export
 beta_mom_estimator <- function(x){
-  xbar <- mean(x)
-  vbar <- var(x)
+  xbar <- stats::mean(x)
+  vbar <- stats::var(x)
 
   ahat <- xbar*((xbar*(1-xbar))/vbar - 1)
   bhat <- (1-xbar)*(xbar*(1-xbar)/vbar - 1)
