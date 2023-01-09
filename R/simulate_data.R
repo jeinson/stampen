@@ -3,7 +3,7 @@
 #' This function can simulate some haplotype combinations based on allele
 #' frequencies sampled from beta distributions. The qtl frequencies are assumed
 #' to represent the higher expressed allele. qtl frequencies are drawn from a
-#' beta distribution with a = b = 1
+#' beta distribution, defined by the parameters `qtl_alpha` and `qtl_beta`
 #'
 #' @param n_indvs The number of individuals to simulate
 #' @param n_genes The number of genes to simulate
@@ -13,13 +13,12 @@
 #' @param qtl_beta shape paramteter beta for the qtl allele frequency. Default = 1
 #' @param maf_cutoff cutoff for the minimum qtl allele frequency when simulating data. This will force the beta distribution for the qtl allele frequency to these limits.
 #'
-#' @export
 #'
 #' @examples
-#' simulate_haplotype_counts(n_indvs = 100, n_genes = 5)
+#' simulate_null_haplotypes(n_indvs = 100, n_genes = 5)
 #'
 #' @export
-simulate_haplotype_counts <- function(
+simulate_null_haplotypes <- function(
   n_indvs,
   n_genes,
   c_alpha = 0.656,
@@ -37,7 +36,7 @@ simulate_haplotype_counts <- function(
   csnp_af <- rbeta(n_genes, c_alpha, c_beta)
 
   # Compile the output
-  haplotype_configs <- data.frame()
+  haplotype_configs <- list()
   for(i in 1:n_genes){
 
     # Generate sQTL haplotypes for all individuals for gene i
@@ -59,35 +58,32 @@ simulate_haplotype_counts <- function(
     # Mark each type of haplotype combination
     haplotypes <- cbind(ssnp_haps, csnp_haps)
 
-    abAB = 0
-    ABab = 0
-    abaB = 0
-    aBab = 0
+    hap_map <- function(numerical_hap){
+      qtl1 = ifelse(numerical_hap[1], 'a', 'A')
+      qtl2 = ifelse(numerical_hap[2], 'a', 'A')
+      crv1 = ifelse(numerical_hap[3], 'b', 'B')
+      crv2 = ifelse(numerical_hap[4], 'b', 'B')
 
-    AbaB = 0
-    aBAb = 0
-    AbAB = 0
-    ABAb = 0
+      character_hap <- paste0(qtl1, crv1, qtl2, crv2)
 
-    for(j in 1:n_indvs){
-      x <- haplotypes[j,]
-
-
-      if(identical(x, c(0, 1, 0, 1))) abAB <- abAB + 1
-      if(identical(x, c(1, 0, 1, 0))) ABab <- ABab + 1
-      if(identical(x, c(0, 0, 0, 1))) abaB <- abaB + 1
-      if(identical(x, c(0, 0, 1, 0))) aBab <- aBab + 1
-      if(identical(x, c(1, 0, 0, 1))) AbaB <- AbaB + 1
-      if(identical(x, c(0, 1, 1, 0))) aBAb <- aBAb + 1
-      if(identical(x, c(1, 1, 0, 1))) AbAB <- AbAB + 1
-      if(identical(x, c(1, 1, 1, 0))) ABAb <- ABAb + 1
+      return(character_hap)
     }
 
-    out <- data.frame(gene = sprintf("gene%i", i), sqtl_af = qtl_af[i], AbaB, aBAb, AbAB, ABAb, abAB, ABab, abaB, aBab)
-    haplotype_configs <- rbind(haplotype_configs, out)
+    hap_symbols <- apply(haplotypes, 1, hap_map)
+
+    output <- data.frame(indv = paste0("indv", 1:n_indvs),
+                         haplotype = hap_symbols,
+                         qtl_af = qtl_af[i])
+
+    # Get rid of the cases of homozygous for the non-mutated cSNP, which will
+    # be most of them.
+    output <- output[!(output$haplotype %in% c("ABAB", "aBAB", "ABaB", "aBaB")),]
+
+    # Append to the output list
+    haplotype_configs[[paste0("gene", i)]] <- output
 
   }
-  return(haplotype_configs)
+  return(dplyr::bind_rows(haplotype_configs, .id = "gene"))
 }
 
 # Simulate the data that's included in this package

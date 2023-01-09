@@ -21,17 +21,16 @@ In this vignette, I demonstrate how to simulate some haplotype data with the-
 variant penetrance.-
 
 ```{r}
-library(tompen)
+library(stampen)
 ```
 
 ```{r}
 set.seed(128)
-test_data <- simulate_haplotype_counts(n_indvs = 500, n_genes = 500) # leave the default hyperparameters
+test_data <- simulate_null_haplotypes(n_indvs = 500, n_genes = 500) # leave the default hyperparameters
 ```
 
 ```{r}
-data('test_data')
-test_data
+head(test_data)
 ```
 
 Let's take a look at the built in haplotype configurations, which we consider
@@ -47,6 +46,6 @@ beta_config_eqtl
 ```
 
 ```{r}
-calculate_epsilon(test_data, beta_config = beta_config_sqtl)
+# calculate_epsilon(test_data, beta_config = beta_config_sqtl)
 ```
 
