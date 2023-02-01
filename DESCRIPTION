@@ -17,7 +17,8 @@ Imports:
   stats,
   tidyr,
   dplyr, 
-  poisbinom
+  poisbinom, 
+  ggplot2
 Collate:
   'data.R'
   'haplotype_test_functions.R'

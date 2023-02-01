@@ -23,6 +23,7 @@ knitr::opts_chunk$set(
 ```{r}
 library(stampen)
 library(dplyr)
+library(ggplot2)
 ```
 
 `stampen` is a package used to simulate haplotype configuration data from large
@@ -154,7 +155,6 @@ test_res
 
 ```{r, fig.height=2, fig.width=6}
 # Make a nice figure
-library(ggplot2)
 ggplot(data.frame(t(test_res)), 
        aes(y = epsilon, x = "baseline", ymin = lower, ymax = upper)) + 
   geom_pointrange() + 
