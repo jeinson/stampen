@@ -36,6 +36,6 @@ to represent the higher expressed allele. qtl frequencies are drawn from a
 beta distribution, defined by the parameters `qtl_alpha` and `qtl_beta`
 }
 \examples{
-simulate_haplotype_counts(n_indvs = 100, n_genes = 5)
+simulate_null_haplotypes(n_indvs = 100, n_genes = 5)
 
 }

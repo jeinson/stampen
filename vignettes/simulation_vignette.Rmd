@@ -1,13 +1,17 @@
 ---
-title: "Simulated Data Vignette"
+title: "`stampen` Usage Vignette"
 author: "Jonah Einson"
-date: "12/10/19"
+email: "jeinson@nygenome.org"
+date: "1/5/23"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Simulated Data Vignette}
+  %\VignetteIndexEntry{stampen Usage Vignette}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+
 ---
+
+
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -16,25 +20,101 @@ knitr::opts_chunk$set(
 )
 ```
 
-In this vignette, I demonstrate how to simulate some haplotype data with the-
-`tompen` package, then test to see if is enriched for haplotypes that reduce
-variant penetrance.-
-
 ```{r}
 library(stampen)
+library(dplyr)
 ```
 
+`stampen` is a package used to simulate haplotype configuration data from large
+phased WGS cohorts, and test for non-random depletion of QTL-coding variant 
+haplotypes using the Poisson-binomial distribution. This non-random depletion 
+can be indicative of a selective effect which favors haplotypes in 
+non-deleterious configurations. This phenomenon is known as "modified 
+penetrance."
+
+# TLDR
+
+A very quick overview of this tool's functionality, for the lazy.
 ```{r}
-set.seed(128)
-test_data <- simulate_null_haplotypes(n_indvs = 500, n_genes = 500) # leave the default hyperparameters
+# Generate some null haplotypes
+test_data <- 
+  simulate_null_haplotypes(
+    n_indvs = 500, n_genes = 500, 
+    qtl_alpha = 1, qtl_beta = 1 # controls the qtl allele frequency distribution
+    # based on a Beta
+  )
+
+# Characterize the haplotypes as high or low penetrance
+test_data_incl_beta <- 
+  characterize_haplotypes(
+    test_data, beta_config = beta_config_sqtl
+  )
+
+head(test_data_incl_beta)
+
+# Run the Poisson-binomial bootstrap test
+bootstrap_test(test_data_incl_beta, B = 1000)
+```
+
+
+## Simulating Data
+
+In this vignette, we demonstrate how to simulate some haplotype data with the
+`stampen` package, then test to see if is enriched for haplotypes that reduce
+variant penetrance.
+
+
+First, we simulate a dataset of haplotypes with from 500 individuals, and 500 
+genes that may carry rare variants. The `simulate_null_haplotypes` function generates data where haplotypes in low penetrance and high penetrance configurations are equally likely to occur. By default, we draw allele frequencies from a uniform distribution, but this can be adjusted by setting the `qtl_alpha` and `qtl_beta`parameters. 
+
+```{r}
+set.seed(1234567890)
+test_data <- simulate_null_haplotypes(
+  n_indvs = 500, n_genes = 500, 
+  qtl_alpha = 1, qtl_beta = 1) # leave the default hyperparameters
 ```
 
 ```{r}
 head(test_data)
 ```
 
-Let's take a look at the built in haplotype configurations, which we consider
-"good" or "bad." these can be adjusted to- 
+The `haplotype` column will be discussed further down. 
+
+In the default configuration, the QTL allele frequency is uniform. 
+```{r, fig.width=6, fig.height=4}
+test_data %>% select(gene, qtl_af) %>% 
+  unique %>% .$qtl_af %>% 
+  hist(main = "Histogram simulated QTL allele frequencies", 
+       xlab = "QTL Af", 
+       col = "cornflowerblue")
+```
+
+We can also adjust the beta distribution parameters to simulate data that 
+arises from any allele frequency distribution that may occur among different 
+sets of QTLs, or populations. 
+
+```{r}
+# Use this built in function to quickly visualize different theoretical allele 
+# frequency distributions, paramterized by 
+stampen:::beta_plotter(a = 2, b = 3)
+```
+
+```{r, fig.width=6, fig.height=4}
+set.seed(128)
+test_data_2 <- simulate_null_haplotypes(n_indvs = 500, n_genes = 500, 
+                                        qtl_alpha = 2, qtl_beta = 3) # new hps
+
+test_data_2 %>% select(gene, qtl_af) %>% 
+  unique %>% .$qtl_af %>% 
+  hist(main = "Histogram simulated QTL allele frequencies", 
+       xlab = "QTL Af", 
+       col = "firebrick")
+```
+
+## Haplotype configuration designations
+
+Let's take a look at the built in haplotype configurations, which we consider "high-penetrance" or "low-penetrance." In a haplotype configuration analysis, an important first step is to hypothesize whether higher expression of a nonmutated allele, or lower inclusion of a mutated allele is what drives modified penetrance. Testing for either is a decision one needs to make. These designations can be adjusted easily by the user. 
+
 ```{r}
 data('beta_config_sqtl')
 beta_config_sqtl
@@ -44,6 +124,92 @@ beta_config_sqtl
 data('beta_config_eqtl')
 beta_config_eqtl
 ```
+
+In the sQTL hypothesis configuation, `a` represents a high exon inclusion alelle, and `A` represents a low inclusion allele. (In the eQTL model, `A` is a highly expressed allele, and `a` is the lowly expressed allele). Therefore, under the sQTL model, an observation of the haplotype `abAB` means an individual is heteryzous for an sQTL, and carries a rare coding variant on the highly included allelic copy. This configuration is assigned a `1` becuase under this model, this configuration results in increased penetrance of the coding variant, with respect to the opposite configuration `AbaB`, where the coding variant is now on the lower included allele, and has reduced penetrance. (See figure 1 of Einson et. al. 2023)
+
+Next, we use the function `characterize_haplotypes` to add two columns to a data frame of haplotypes. The new columns are.
+
+- **beta**: Represents a high penetrance (1) or low penetrance (0) configuration, which is defined by the input `beta_config`. 
+- **hom**: Boolean. Is this individual homozygous for the QTL allele?
+- **exp_beta**: When hom == `TRUE`, this is calculated as `sqtl_af^2 / (sqtl_af^2 + (1 - sqtl_af^2))`. When `hom` == `TRUE`, i.e. the haplotype is hetorozygous, we assign 0.5. In practice, `sqtl_af` is the allele frequency of the *penetrance driving allele*. For sQTLs, this is the frequency of the high exon inclusion alelle, and for eQTLs, this is the allele frequency of the lower expressed allele. 
+
+```{r}
+test_data_incl_beta <- 
+  characterize_haplotypes(test_data, beta_config = beta_config_sqtl)
+
+head(test_data_incl_beta, 20)
+```
+
+## Test for depletion of high penetrance haplotypes
+Now use the `calculate_epsilon` and `bootstrap_test` functions to calculate depletion, which we call epsilon, and get the significance of this depletion. 
+
+```{r}
+calculate_epsilon(dataset = test_data_incl_beta)
+```
+
+```{r}
+test_res <- bootstrap_test(test_data_incl_beta, B = 1000)
+test_res
+```
+
+```{r, fig.height=2, fig.width=6}
+# Make a nice figure
+library(ggplot2)
+ggplot(data.frame(t(test_res)), 
+       aes(y = epsilon, x = "baseline", ymin = lower, ymax = upper)) + 
+  geom_pointrange() + 
+  geom_hline(yintercept = 0, lty = 3) + 
+  ylim(-.1, .1) + 
+  ylab("ε") +
+  theme_classic() +
+  theme(axis.text.y = element_blank(),
+        axis.title.y = element_blank(),
+        legend.position = "none") +
+  coord_flip() +
+  theme(axis.ticks.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.line.y = element_blank())
+```
+
+Now as a demonstration, let's remove some "high penetrance" haplotypes to show how sensitive the test is for detecing this signal. 
+
+```{r}
+idx <- which(test_data_incl_beta$beta == 1)
+idx.removed <- sample(idx, .15 * length(idx), replace = F)
+
+test_data_incl_beta_depleted <- test_data_incl_beta[-idx.removed,]
+test_res_depl <- bootstrap_test(test_data_incl_beta_depleted)
+```
+
+```{r, fig.height=2, fig.width=6}
+plt <- data.frame(rbind(test_res, test_res_depl))
+plt <- tibble::rownames_to_column(plt)
+n_pos = .2; pval_pos = .15
+ggplot(plt,
+       aes(y = epsilon, x = "baseline", col = rowname, ymin = lower, ymax = upper)) + 
+  geom_pointrange(position = position_dodge(.5)) + 
+  geom_hline(yintercept = 0, lty = 3) + 
+  ylim(-.2, .2) + 
+  ylab("ε") +
+  # The P-value label
+  geom_text(mapping = aes(y = pval_pos, label = bootstrap_p),
+            position = position_dodge(width = .5)) +
+  
+  # The N-sample label
+  geom_text(mapping = aes(y = n_pos, label = prettyNum(n_haplotypes, big.mark = ",")),
+            position = position_dodge(width = .5)) +
+  theme_classic() +
+  theme(axis.text.y = element_blank(),
+        axis.title.y = element_blank()) +
+  coord_flip() +
+  theme(axis.ticks.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.line.y = element_blank())
+```
+
+
+## Run the tutorial 
+
 
 ```{r}
 # calculate_epsilon(test_data, beta_config = beta_config_sqtl)

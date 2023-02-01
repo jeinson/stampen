@@ -7,7 +7,7 @@
 characterize_haplotypes(
   dataset,
   beta_config,
-  qtl_allele_frequency_column = "sqtl_af",
+  qtl_allele_frequency_column = "qtl_af",
   gene_name_column = "gene"
 )
 }

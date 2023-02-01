@@ -79,6 +79,9 @@ simulate_null_haplotypes <- function(
     # be most of them.
     output <- output[!(output$haplotype %in% c("ABAB", "aBAB", "ABaB", "aBaB")),]
 
+    # Also get rid of coding variant minor allele homozygotes
+    output <- output[!(output$haplotype %in% c("AbAb", "Abab", "abAb", "abab")),]
+
     # Append to the output list
     haplotype_configs[[paste0("gene", i)]] <- output
 

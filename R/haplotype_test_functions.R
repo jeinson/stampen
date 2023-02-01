@@ -14,26 +14,21 @@
 #' @export
 #'
 characterize_haplotypes <- function(dataset, beta_config,
-                                    qtl_allele_frequency_column = "sqtl_af",
+                                    qtl_allele_frequency_column = "qtl_af",
                                     gene_name_column = "gene"){
   x <- dataset
 
-  # Make sure to use the correct beta configurations
-  beta_config <- beta_config[names(beta_config) %in% names(x)]
-
   # Rename the input data
   x <- dplyr::rename(x, "sqtl_af" = qtl_allele_frequency_column)
-  x <- dplyr::rename(x, "gene" = gene_name_column)
-  x <- dplyr::select(x, "sqtl_af", "gene", names(beta_config))
+  x <- dplyr::rename(x, "gene" = all_of(gene_name_column))
 
-  # Reshape and spread haplotypes out to one per line
-  x <- tidyr::gather(x, hap_config, num, -"gene", -"sqtl_af", convert = F, factor_key = F)
-  x <- x[x$num != 0,]
-  x <- as.data.frame(lapply(x, rep, x$num))
-  x <- x[,-4]
-  x$beta <- beta_config[as.character(x$hap_config)] # Fuck you R
-  x$hom <- grepl("A.A.", x$hap_config) | grepl("a.a.", x$hap_config)
+  # Add a column for beta
+  x$beta <- beta_config[x$haplotype]
 
+  # Add a column which labels haplotypes as being homozygous or not
+  x$hom <- sapply(x$haplotype, function(x) x %in% c("abaB", "aBab", "AbAB", "ABAb"))
+
+  # Now calculate the expectation of Beta
   x$exp_beta <- (x$sqtl_af)^2 / (x$sqtl_af^2 + (1-x$sqtl_af)^2)
 
   # Switch out exp_beta for heterozygotes
@@ -54,12 +49,10 @@ characterize_haplotypes <- function(dataset, beta_config,
 #' a set of haplotypes based on phased genetic data.
 #'
 #' @param dataset A set of haplotype counts
-#' @param beta_config A beta configuration (use either beta_config_eqtl or beta_config_sqtl, which are included in this package)
-#' @param ... Additional arguments passed to `characterize_haplotypes`
 #' @export
 #'
-calculate_epsilon <- function(dataset, beta_config, ...){
-  x <- characterize_haplotypes(dataset, beta_config, ...)
+calculate_epsilon <- function(dataset){
+  x <- dataset
 
   # Do the math
   mean(x$beta - x$exp_beta)
