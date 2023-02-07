@@ -113,17 +113,17 @@ penetrance.”</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">test_data_incl_beta</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    gene    indv haplotype sqtl_af beta   hom  exp_beta</span></span>
-<span><span class="co">#&gt; 1 gene1 indv172      abaB   0.741    1  TRUE 0.8911309</span></span>
-<span><span class="co">#&gt; 2 gene1 indv257      ABAb   0.741    0  TRUE 0.8911309</span></span>
-<span><span class="co">#&gt; 3 gene6 indv466      AbaB   0.057    0 FALSE 0.5000000</span></span>
-<span><span class="co">#&gt; 4 gene8 indv260      aBAb   0.300    0 FALSE 0.5000000</span></span>
-<span><span class="co">#&gt; 5 gene8 indv295      aBab   0.300    1  TRUE 0.1551724</span></span>
-<span><span class="co">#&gt; 6 gene8 indv354      ABAb   0.300    0  TRUE 0.1551724</span></span>
+<span><span class="co">#&gt; 1 gene1   indv2      ABAb   0.937    0  TRUE 0.9954997</span></span>
+<span><span class="co">#&gt; 2 gene1 indv176      AbAB   0.937    0  TRUE 0.9954997</span></span>
+<span><span class="co">#&gt; 3 gene2 indv170      ABAb   0.740    0  TRUE 0.8901170</span></span>
+<span><span class="co">#&gt; 4 gene3 indv163      abaB   0.436    1  TRUE 0.3740633</span></span>
+<span><span class="co">#&gt; 5 gene4  indv23      ABab   0.845    1 FALSE 0.5000000</span></span>
+<span><span class="co">#&gt; 6 gene4 indv102      AbAB   0.845    0  TRUE 0.9674480</span></span>
 <span></span>
 <span><span class="co"># Run the Poisson-binomial bootstrap test</span></span>
 <span><span class="fu"><a href="../reference/bootstrap_test.html">bootstrap_test</a></span><span class="op">(</span><span class="va">test_data_incl_beta</span>, B <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  bootstrap_p      epsilon        lower        upper n_haplotypes </span></span>
-<span><span class="co">#&gt;   0.00000000  -0.08916359  -0.13450574  -0.04419489 677.00000000</span></span></code></pre></div>
+<span><span class="co">#&gt;   0.22400000   0.03118925  -0.01184589   0.07192872 709.00000000</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="simulating-data">Simulating Data<a class="anchor" aria-label="anchor" href="#simulating-data"></a>
 </h3>
