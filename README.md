@@ -7,6 +7,8 @@ This repository contains an R package implementation of the Test of Modified pen
 
 Currently a work in progress! Proceed with caution
 
+Check out for a usage Vignette: https://jeinson.github.io/stampen/
+
 To install in R
 
 ```r
