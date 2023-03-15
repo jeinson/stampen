@@ -33,7 +33,7 @@ simulate_null_haplotypes <- function(
   qtl_af <- (1-2*maf_cutoff) * qtl_af + maf_cutoff # Use a little y = mx+b to get the haplotypes to the right place
 
   # Simulate the allele frequency of coding variants corresponding to each gene
-  csnp_af <- rbeta(n_genes, c_alpha, c_beta)
+  csnp_af <- stats::rbeta(n_genes, c_alpha, c_beta)
 
   # Compile the output
   haplotype_configs <- list()
@@ -145,7 +145,7 @@ beta_plotter <- function(a,b, ...){
 #'
 #' @export
 beta_mom_estimator <- function(x){
-  xbar <- stats::mean(x)
+  xbar <- mean(x)
   vbar <- stats::var(x)
 
   ahat <- xbar*((xbar*(1-xbar))/vbar - 1)

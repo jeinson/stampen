@@ -20,7 +20,7 @@ characterize_haplotypes <- function(dataset, beta_config,
 
   # Rename the input data
   x <- dplyr::rename(x, "sqtl_af" = qtl_allele_frequency_column)
-  x <- dplyr::rename(x, "gene" = all_of(gene_name_column))
+  x <- dplyr::rename(x, "gene" = dplyr::all_of(gene_name_column))
 
   # Add a column for beta
   x$beta <- beta_config[x$haplotype]

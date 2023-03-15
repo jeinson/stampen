@@ -1,7 +1,7 @@
 Package: stampen
 Type: Package
 Title: [Sta]tistics for [M]odified [Pen]etrance
-Version: 0.2.0
+Version: 0.3.0
 Authors@R: c(
     person(given = 'Jonah', family = 'Einson', email = 'jeinson@nygenome.org', role = c('aut', 'cre')),
     person(given = 'Pejman', family = 'Mohammadi', email = 'pejman.m@gmail.com', role = 'aut')
@@ -14,17 +14,17 @@ LazyData: true
 RoxygenNote: 7.2.1
 Depends: R (>= 3.5.0)
 Imports:
-  stats,
-  tidyr,
-  dplyr, 
-  poisbinom, 
-  ggplot2
+    stats,
+    dplyr,
+    poisbinom
 Collate:
   'data.R'
   'haplotype_test_functions.R'
   'simulate_data.R'
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown, 
+    ggplot2,
+    tibble
 VignetteBuilder: knitr
 URL: https://jeinson.github.io/stampen/

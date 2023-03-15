@@ -5,11 +5,12 @@
 \alias{test_data}
 \title{Some simulated haplotype count data from 1000 individuals and 500 genes}
 \format{
-A data frame with 500 rows and 10 columns
+A data frame with about 15,000 rows and 4 columns
 \describe{
     \item{gene}{simulated gene name}
-    \item{sqtl_af}{The frequency of the higher included sQTL haplotype}
-    \item{[Aa][Bb][Aa][Bb]}{The counts of each haplotype configuration across the 1000 individuals}
+    \item{indv}{simulated individual name}
+    \item{haplotype}{The simulated haplotype with 'a' and 'A' being high and low included alleles, and 'b' and 'B' being rare and common coding variant alleles.}
+    \item{qtl_af}{The frequency of the 'penetrance driving' QTL qllele. i.e. lower splicing or higher expression allele.}
     ...
 }
 }
