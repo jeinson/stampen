@@ -14,7 +14,7 @@ allele and the sqtl allele, so the result of the test should be null"><!-- mathj
     
     <a class="navbar-brand me-2" href="../index.html">stampen</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,14 +59,17 @@ allele and the sqtl allele, so the result of the test should be null</p>
 
     <div class="section level2">
     <h2 id="format">Format<a class="anchor" aria-label="anchor" href="#format"></a></h2>
-    <p>A data frame with 500 rows and 10 columns</p><dl><dt>gene</dt>
+    <p>A data frame with about 15,000 rows and 4 columns</p><dl><dt>gene</dt>
 <dd><p>simulated gene name</p></dd>
 
-    <dt>sqtl_af</dt>
-<dd><p>The frequency of the higher included sQTL haplotype</p></dd>
+    <dt>indv</dt>
+<dd><p>simulated individual name</p></dd>
 
-    <dt>[Aa][Bb][Aa][Bb]</dt>
-<dd><p>The counts of each haplotype configuration across the 1000 individuals</p></dd>
+    <dt>haplotype</dt>
+<dd><p>The simulated haplotype with 'a' and 'A' being high and low included alleles, and 'b' and 'B' being rare and common coding variant alleles.</p></dd>
+
+    <dt>qtl_af</dt>
+<dd><p>The frequency of the 'penetrance driving' QTL qllele. i.e. lower splicing or higher expression allele.</p></dd>
 
     ...
 

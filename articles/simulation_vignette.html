@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">stampen</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,7 +84,10 @@ Einson</h4>
 <span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Loading required package: tibble</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Loading required package: ggplot2</span></span></code></pre></div>
 <p><code>stampen</code> is a package used to simulate haplotype
 configuration data from large phased WGS cohorts, and test for
 non-random depletion of QTL-coding variant haplotypes using the
@@ -112,18 +115,18 @@ penetrance.”</p>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">test_data_incl_beta</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    gene    indv haplotype sqtl_af beta   hom  exp_beta</span></span>
-<span><span class="co">#&gt; 1 gene5 indv245      AbaB   0.773    0 FALSE 0.5000000</span></span>
-<span><span class="co">#&gt; 2 gene6 indv228      ABAb   0.674    0  TRUE 0.8104083</span></span>
-<span><span class="co">#&gt; 3 gene6 indv241      ABab   0.674    1 FALSE 0.5000000</span></span>
-<span><span class="co">#&gt; 4 gene6 indv246      ABAb   0.674    0  TRUE 0.8104083</span></span>
-<span><span class="co">#&gt; 5 gene6 indv309      ABAb   0.674    0  TRUE 0.8104083</span></span>
-<span><span class="co">#&gt; 6 gene6 indv375      ABAb   0.674    0  TRUE 0.8104083</span></span>
+<span><span class="co">#&gt;    gene    indv haplotype sqtl_af beta   hom   exp_beta</span></span>
+<span><span class="co">#&gt; 1 gene3 indv172      abAB   0.494    1 FALSE 0.50000000</span></span>
+<span><span class="co">#&gt; 2 gene3 indv267      ABAb   0.494    0  TRUE 0.48800173</span></span>
+<span><span class="co">#&gt; 3 gene3 indv271      aBAb   0.494    0 FALSE 0.50000000</span></span>
+<span><span class="co">#&gt; 4 gene3 indv464      ABab   0.494    1 FALSE 0.50000000</span></span>
+<span><span class="co">#&gt; 5 gene5 indv155      abAB   0.168    1 FALSE 0.50000000</span></span>
+<span><span class="co">#&gt; 6 gene5 indv279      aBab   0.168    1  TRUE 0.03917562</span></span>
 <span></span>
 <span><span class="co"># Run the Poisson-binomial bootstrap test</span></span>
 <span><span class="fu"><a href="../reference/bootstrap_test.html">bootstrap_test</a></span><span class="op">(</span><span class="va">test_data_incl_beta</span>, B <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   bootstrap_p       epsilon         lower         upper  n_haplotypes </span></span>
-<span><span class="co">#&gt;   0.922000000   0.002546359  -0.039555247   0.049623976 725.000000000</span></span></code></pre></div>
+<span><span class="co">#&gt;  bootstrap_p      epsilon        lower        upper n_haplotypes </span></span>
+<span><span class="co">#&gt;   0.01000000   0.06826368   0.02252399   0.11720902 702.00000000</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="simulating-data">Simulating Data<a class="anchor" aria-label="anchor" href="#simulating-data"></a>
 </h3>
